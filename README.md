@@ -105,6 +105,22 @@ The projection \(\pi\) implemented here is currently a **deterministic symbolic 
 It is sufficient for verification of closure properties, but is not claimed
 to be the unique or canonical compression map.
 
+---
+
+### 4. Edge compression pipeline
+
+- `compress_edges_to_9state.c`  
+  Generates the compressed transition relation (REAL_EDGES) from raw profile and edge data.
+
+  Input:
+  - `D_macro_profiles_34.csv`
+  - `D_debt_edges_34.csv`
+
+  Output:
+  - `real_edges.txt`
+  - `real_edges.json`
+
+  This step defines the finite automaton used in the proof.
 ## Logical Dependency
 
 The computational verification mirrors the logical structure of the proof:
