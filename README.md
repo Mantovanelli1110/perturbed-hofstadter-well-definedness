@@ -249,7 +249,7 @@ Used as input for edge construction and compression.
 
 ```bash
 gcc -O2 -std=c11 -o gen data_generation/q_D_macro_profiles_stream_occ_win64.c
-./gen
+gen
 ```
 
 ---
@@ -258,7 +258,7 @@ gcc -O2 -std=c11 -o gen data_generation/q_D_macro_profiles_stream_occ_win64.c
 
 ```bash
 gcc -O2 -std=c11 -o anchors make_exact_anchor_pairs_win64.c
-./anchors
+anchors
 ```
 
 ---
@@ -267,7 +267,7 @@ gcc -O2 -std=c11 -o anchors make_exact_anchor_pairs_win64.c
 
 ```bash
 gcc -O2 -std=c11 -o infer infer_pi_from_exact_symbolic_trace_win64.c
-./infer
+infer
 ```
 
 ---
@@ -276,7 +276,7 @@ gcc -O2 -std=c11 -o infer infer_pi_from_exact_symbolic_trace_win64.c
 
 ```bash
 gcc -O2 -std=c11 -o compress compress_edges_to_9state.c
-./compress
+compress
 ```
 
 ---
@@ -285,7 +285,7 @@ gcc -O2 -std=c11 -o compress compress_edges_to_9state.c
 
 ```bash
 gcc -O2 -std=c11 -o propagate construct_and_propagate.c
-./propagate
+propagate
 ```
 
 ---
@@ -294,7 +294,7 @@ gcc -O2 -std=c11 -o propagate construct_and_propagate.c
 
 ```bash
 gcc -O2 -std=c11 -o closure check_local_context_closure_corepsi_win64.c
-./closure
+closure
 ```
 
 ---
@@ -303,7 +303,7 @@ gcc -O2 -std=c11 -o closure check_local_context_closure_corepsi_win64.c
 
 ```bash
 g++ -O2 -std=c++17 -o checkall checkall.cpp
-./checkall
+checkall
 ```
 
 ---
