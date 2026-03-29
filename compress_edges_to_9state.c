@@ -135,7 +135,8 @@ static void compress_edges(const char *edges_csv) {
         }
 
         if (!(fd == 0 || fd == 2 || td == 0 || td == 2)) {
-            /* keep indexing simple: debt values are expected to be 0 or 2 */
+               fprintf(stderr, "Invalid debt value: %d -> %d\n", fd, td);
+               exit(1);
         }
 
         if (!SEEN[fsid][fd][tsid][td]) {
