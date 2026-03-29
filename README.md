@@ -62,7 +62,7 @@ perturbed-hofstadter-well-definedness/
 ├── compress_edges_to_9state.c
 ├── construct_and_propagate.c
 ├── infer_pi_from_exact_symbolic_trace_win64.c
-└── make_exact_anchor_pairs_win64.c
+├── make_exact_anchor_pairs_win64.c
 ```
 
 ---
@@ -78,21 +78,29 @@ exact_anchor_pairs.csv
    ↓
 (infer_pi)
    ↓
-context → symbolic states
+(no global π exists)
    ↓
-(q_D_macro_profiles + edge data)
+(q_D_macro_profiles)
    ↓
 (compress_edges)
    ↓
-compressed automaton (9-state system)
+9-state system (37 edges)
    ↓
 (construct_and_propagate)
    ↓
-Λ_adm, Ψ, support sets
+Λ_adm, Ψ, domains
+   ↓
+(two_mode_automaton)
+   ↓
+Mode A / Mode B
+   ↓
+(branch_comparison_solver)
+   ↓
+independent validation of both modes
    ↓
 (check_local_context_closure)
    ↓
-model consistency verified
+closure consistency check
    ↓
 (checkall)
    ↓
@@ -117,9 +125,7 @@ Core reconstruction and propagation engine.
 * Computes support sets
 * Extracts the critical core structure
 
-**Mathematical role:**
-
-Supports Sections 2–8 of the paper.
+**Mathematical role:** Supports Sections 2–8 of the paper.
 
 ---
 
@@ -147,17 +153,10 @@ Consistency verification between:
 * local symbolic model
 * compressed automaton
 
-**Checks:**
-
-* If $\lambda \to \mu$ is valid, then
-  $$
-  \pi(\lambda) \to \pi(\mu)
-  $$
-  is a valid symbolic transition
-
-**Role:**
-
-Ensures that the symbolic model is faithful and introduces no spurious transitions.
+Ensures:
+$$
+\lambda \to \mu \Rightarrow \pi(\lambda) \to \pi(\mu)
+$$
 
 ---
 
@@ -165,17 +164,10 @@ Ensures that the symbolic model is faithful and introduces no spurious transitio
 
 Constructs the compressed symbolic automaton.
 
-**Input:**
+**Result:**
 
-* `data/D_macro_profiles_34.csv`
-* `data/D_debt_edges_34.csv`
-
-**Output:**
-
-* `real_edges.txt`
-* `real_edges.json`
-
-Defines the finite transition system used in the proof.
+* 9 states
+* 37 transitions
 
 ---
 
@@ -183,41 +175,23 @@ Defines the finite transition system used in the proof.
 
 Extracts canonical anchor pairs from the symbolic trace.
 
-**Functionality:**
-
-* Reads `symbolic_trace.txt`
-* Identifies structural anchor positions
-* Outputs alignment pairs
-
-**Output:**
-
-* `exact_anchor_pairs.csv`
-
-**Role:**
-
-Provides the structural backbone for reconstructing local contexts.
-
 ---
 
 ### 6. `infer_pi_from_exact_symbolic_trace_win64.c`
 
-Infers the projection
+Attempts to construct a global projection
 
 $$
 \pi : \Lambda_{\mathrm{adm}} \to {S_i[d]}
 $$
 
-from the symbolic trace.
+**Key result:**
 
-**Functionality:**
+```
+RESULT: no exact anchored pi exists.
+```
 
-* Reads symbolic trace + anchor data
-* Assigns symbolic states to contexts
-* Produces context → state mapping
-
-**Role:**
-
-Connects the context-level system to the compressed automaton.
+This is a **structural turning point** of the proof.
 
 ---
 
@@ -227,93 +201,139 @@ Connects the context-level system to the compressed automaton.
 
 #### `q_D_macro_profiles_stream_occ_win64.c`
 
-Generates macro-profile occurrence data from the symbolic sequence.
+Generates:
 
-Used as input for edge construction and compression.
+* macro profiles
+* debt transitions
+* occurrence statistics
 
 ---
 
 ### `automaton/`
 
-* `two_mode_automaton.c`
-  Implements the two-mode structure (Mode A / Mode B)
+#### `two_mode_automaton.c`
 
-* `branch_comparison_solver.c`
-  Auxiliary solver for comparing symbolic branches
+Constructs the **two-mode structure**:
+
+* Mode A
+* Mode B
+
+Provides explicit global assignments compatible with all local constraints.
+
+---
+
+#### `branch_comparison_solver.c`
+
+Independent solver that:
+
+* reconstructs both modes
+* verifies consistency independently of the main pipeline
+
+This serves as a **redundant validation layer**.
 
 ---
 
 ## ▶️ Reproducibility Guide
 
-### Step 1 — Generate macro profiles
+### 1. Generate macro profiles
 
 ```bash
 gcc -O2 -std=c11 -o gen data_generation/q_D_macro_profiles_stream_occ_win64.c
-gen
+./gen
 ```
 
 ---
 
-### Step 2 — Extract anchor pairs
+### 2. Construct anchor pairs
 
 ```bash
 gcc -O2 -std=c11 -o anchors make_exact_anchor_pairs_win64.c
-anchors
+./anchors
 ```
 
 ---
 
-### Step 3 — Infer projection
+### 3. Attempt global solution
 
 ```bash
 gcc -O2 -std=c11 -o infer infer_pi_from_exact_symbolic_trace_win64.c
-infer
+./infer
+```
+
+Expected:
+
+```
+RESULT: no exact anchored pi exists.
 ```
 
 ---
 
-### Step 4 — Compress automaton
+### 4. Compress to finite system
 
 ```bash
 gcc -O2 -std=c11 -o compress compress_edges_to_9state.c
-compress
+./compress
 ```
 
 ---
 
-### Step 5 — Build symbolic system
+### 5. Build local system
 
 ```bash
 gcc -O2 -std=c11 -o propagate construct_and_propagate.c
-propagate
+./propagate
 ```
 
 ---
 
-### Step 6 — Verify closure
+### 6. Construct two-mode automaton
+
+```bash
+gcc -O2 -std=c11 -o two_mode automaton/two_mode_automaton.c
+./two_mode
+```
+
+---
+
+### 7. Independent branch validation
+
+```bash
+gcc -O2 -std=c11 -o branch automaton/branch_comparison_solver.c
+./branch
+```
+
+---
+
+### 8. Check closure
 
 ```bash
 gcc -O2 -std=c11 -o closure check_local_context_closure_corepsi_win64.c
-closure
+./closure
 ```
 
 ---
 
-### Step 7 — Final verification
+### 9. Final verification
 
 ```bash
 g++ -O2 -std=c++17 -o checkall checkall.cpp
-checkall
+./checkall
+```
+
+Expected:
+
+```
+VERIFIED: no simultaneous obstruction on the critical core.
 ```
 
 ---
 
 ## 📊 Guarantees
 
-* All computations are **finite**
+* All structures are **finite and explicitly enumerated**
 * No randomness or heuristics
 * Fully deterministic pipeline
-* All data reproducible from source
+* Independent validation of key structures (two-mode system)
 
 This repository provides a:
 
@@ -327,8 +347,8 @@ This repository provides a:
 | -------------------------- | --------------------------------------------- |
 | Finite symbolic model      | `construct_and_propagate.c`                   |
 | Compatibility graph $\Psi$ | `construct_and_propagate.c`                   |
-| Debt rigidity              | `construct_and_propagate.c`                   |
-| Constraint propagation     | `construct_and_propagate.c`                   |
+| Two-mode structure         | `automaton/two_mode_automaton.c`              |
+| Independent validation     | `automaton/branch_comparison_solver.c`        |
 | Closure verification       | `check_local_context_closure_corepsi_win64.c` |
 | Critical core verification | `checkall.cpp`                                |
 
@@ -336,8 +356,7 @@ This repository provides a:
 
 ## 📌 Final Remark
 
-This repository demonstrates that a highly nonlocal recursion can be reduced to a **finite-state system whose consistency can be verified by exhaustive computation**.
-
+This repository demonstrates that a highly nonlocal recursion can be reduced to a **finite-state system whose consistency can be verified by exhaustive computation**. All admissible configurations are explicitly generated and checked.
 
 ## 📜 License
 
