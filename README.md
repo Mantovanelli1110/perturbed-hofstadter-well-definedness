@@ -65,6 +65,45 @@ This establishes the final step:
 > The finite constraint system has no obstruction.
 
 ---
+### 3. `check_local_context_closure_corepsi.c`
+
+This program verifies the consistency between the local symbolic model
+and the empirically observed compressed transition system.
+
+It performs the following:
+
+- Constructs the full set of admissible local contexts \(\Lambda_{\mathrm{adm}}\)
+- Builds the local successor relation \(\Psi\)
+- Loads experimentally observed compressed states and transitions (CSV)
+- Defines a projection
+  \[
+  \pi : \Lambda_{\mathrm{adm}} \to \{S_i[d]\}
+  \]
+- Verifies that every local transition is mapped to a valid observed transition
+
+In particular, it checks the **closure property**:
+
+> If \( \lambda \to \lambda' \) is a valid local step,  
+> then \( \pi(\lambda) \to \pi(\lambda') \) must be an observed edge.
+
+---
+
+### Mathematical role
+
+This program provides evidence that:
+
+- the symbolic local model does not introduce spurious transitions
+- the projection \(\pi\) is compatible with the observed automaton
+- the finite reduction faithfully represents the underlying dynamics
+
+---
+
+### Important note
+
+The projection \(\pi\) implemented here is currently a **deterministic symbolic proxy**.
+
+It is sufficient for verification of closure properties, but is not claimed
+to be the unique or canonical compression map.
 
 ## Logical Dependency
 
