@@ -86,8 +86,11 @@ perturbed-hofstadter-well-definedness/
 │   ├── verification/
 │   │   └── checkall.cpp
 │   │
-│   └── data_generation/
-│       └── q_D_macro_profiles_stream_occ_win64.c
+│   ├── data_generation/
+│   │    └── q_D_macro_profiles_stream_occ_win64.c
+│   │ 
+│   └── trace_generation/
+│        └── q_dyadic_jT_win64_map.c
 │
 ├── data/
 │   ├── symbolic_trace.txt
