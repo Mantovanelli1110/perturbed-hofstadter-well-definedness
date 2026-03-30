@@ -7,7 +7,7 @@
 #include <windows.h>
 
 #ifndef DEFAULT_MAX_M
-#define DEFAULT_MAX_M 33
+#define DEFAULT_MAX_M 36
 #endif
 
 typedef uint64_t QTYPE;
