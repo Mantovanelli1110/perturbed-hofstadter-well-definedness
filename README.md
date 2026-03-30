@@ -45,8 +45,7 @@ perturbed-hofstadter-well-definedness/
 │   │   ├── make_exact_anchor_pairs_win64.c
 │   │   ├── infer_pi_from_exact_symbolic_trace_win64.c
 │   │   ├── compress_edges_to_9state.c
-│   │   ├── construct_and_propagate.c
-│   │   └── check_local_context_closure_corepsi_win64.c
+│   │   └── construct_and_propagate.c
 │   │
 │   ├── automaton/
 │   │   ├── two_mode_automaton.c
