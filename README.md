@@ -31,6 +31,19 @@ The infinite recursion is reduced to a **finite combinatorial system**:
 5. Exhaustively verify all **15 subsets** of this core
 
 ---
+## Quick Start
+
+To execute the full formal computational proof pipeline on Windows, run:
+
+```bat
+run_all.bat
+```
+
+The script stops immediately if any step fails and writes a complete execution log to:
+
+```text
+output\run_all.log
+```
 
 ## ⚙️ Repository Structure
 
@@ -39,6 +52,7 @@ perturbed-hofstadter-well-definedness/
 │
 ├── README.md
 ├── LICENSE
+├── run_all.bat
 │
 ├── src/
 │   ├── pipeline/
