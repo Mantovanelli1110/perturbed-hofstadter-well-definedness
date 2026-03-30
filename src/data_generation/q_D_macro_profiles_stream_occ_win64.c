@@ -6,7 +6,7 @@
 #include <windows.h>
 
 #ifndef DEFAULT_MAX_M
-#define DEFAULT_MAX_M 36
+#define DEFAULT_MAX_M 34
 #endif
 
 #ifndef DEFAULT_BLOCKLEN
