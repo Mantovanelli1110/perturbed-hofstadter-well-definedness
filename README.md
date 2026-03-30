@@ -293,7 +293,7 @@ For full transparency, the symbolic trace can be regenerated directly from the d
 
 ```bash
 gcc -O2 -std=c11 -o trace src/trace_generation/q_dyadic_jT_win64_map.c
-./trace 36
+trace 
 ```
 
 This program performs an exact simulation of the perturbed Hofstadter recursion up to dyadic level (m = 36), i.e. up to (n = 2^{36}), using a memory-mapped array.
@@ -319,7 +319,7 @@ E-code = {...}
 To reproduce the file used in the pipeline, the output can be redirected:
 
 ```bash
-./trace 36 > data/symbolic_trace_raw.txt
+trace > data/symbolic_trace_raw.txt
 ```
 
 The corresponding section is then copied into:
