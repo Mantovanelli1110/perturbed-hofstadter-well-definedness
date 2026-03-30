@@ -287,6 +287,54 @@ This repository provides a:
 | Critical core verification | `src/verification/checkall.cpp`                            |
 
 ---
+### Optional: Reconstructing the symbolic trace from first principles
+
+For full transparency, the symbolic trace can be regenerated directly from the defining recursion using:
+
+```bash
+gcc -O2 -std=c11 -o trace src/trace_generation/q_dyadic_jT_win64_map.c
+./trace 36
+```
+
+This program performs an exact simulation of the perturbed Hofstadter recursion up to dyadic level (m = 36), i.e. up to (n = 2^{36}), using a memory-mapped array.
+
+At each dyadic level, it extracts:
+
+* the derived sequences ((E_m, F_m, G_m)), (\kappa_m), and (\delta_m),
+* the induced binary sequence (c_m),
+* the corresponding **5-state path** obtained from local 4-blocks,
+* the decomposition into **return words**,
+* and the resulting **E-code sequence** (with symbols (R1, R2, R3)).
+
+The relevant output for the proof is the block:
+
+```text
+Completed dyadic level m = 36
+
+5-state path = {...}
+
+E-code = {...}
+```
+
+To reproduce the file used in the pipeline, the output can be redirected:
+
+```bash
+./trace 36 > data/symbolic_trace_raw.txt
+```
+
+The corresponding section is then copied into:
+
+```text
+data/symbolic_trace.txt
+```
+
+---
+
+**Important.**
+This step is **not required** for the verification pipeline. The file `data/symbolic_trace.txt` is treated as a fixed deterministic input.
+
+However, including this program ensures that the symbolic trace is fully reproducible from first principles and not a manually constructed artifact.
+
 
 ## 📌 Final Remark
 
