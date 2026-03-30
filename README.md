@@ -31,6 +31,24 @@ The infinite recursion is reduced to a **finite combinatorial system**:
 5. Exhaustively verify all **15 subsets** of this core
 
 ---
+## 📥 Symbolic Trace
+
+The file `data/symbolic_trace.txt` (and the embedded version used in some programs) contains a symbolic encoding of the sequence up to dyadic level (m = 36).
+
+It consists of:
+
+* a **5-state path** describing the local configuration types
+* an **E-code sequence** describing the recursive structure
+
+This trace is obtained by direct simulation of the recursion and subsequent symbolic encoding.
+
+It serves as a **fixed deterministic input** for reconstructing the finite model used in the proof.
+
+For convenience and reproducibility, the same trace is embedded directly in certain programs (e.g. construct_and_propagate.c), but it is identical to the version stored in:
+
+data/symbolic_trace.txt
+
+---
 ## Quick Start
 
 To execute the full formal computational proof pipeline on Windows, run:
